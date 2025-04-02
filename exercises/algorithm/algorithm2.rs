@@ -30,13 +30,13 @@ struct LinkedList<T> {
     end: Option<NonNull<Node<T>>>,
 }
 
-impl<T: Display> Default for LinkedList<T> {
+impl<T> Default for LinkedList<T> {
     fn default() -> Self {
         Self::new()
     }
 }
 
-impl<T: Display> LinkedList<T> {
+impl<T> LinkedList<T> {
     pub fn new() -> Self {
         Self {
             length: 0,

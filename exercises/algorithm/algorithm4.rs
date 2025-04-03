@@ -59,19 +59,18 @@ where
             },
             Some(root) => root.insert(value),
         }
-        let box_node: Box<TreeNode<T>> = Box::new(TreeNode::new(value));
-        let box_node_ptr = Box::into_raw(box_node);
+        let node = Some(Box::new(TreeNode::new(value)));
         let mut current_ptr = self.root.as_mut();
         while let Some(ptr) = current_ptr {
             if value < ptr.value {
                 if ptr.left.is_none() {
-                    ptr.left = Some(unsafe { Box::from_raw(box_node_ptr) });
+                    ptr.left = node;
                     break;
                 }
                 current_ptr = ptr.left.as_mut();
             } else if value > ptr.value {
                 if ptr.right.is_none() {
-                    ptr.right = Some(unsafe { Box::from_raw(box_node_ptr) });
+                    ptr.right = node;
                     break;
                 }
                 current_ptr = ptr.right.as_mut();

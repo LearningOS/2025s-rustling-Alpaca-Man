@@ -36,8 +36,17 @@ where
         self.len() == 0
     }
 
-    pub fn add(&mut self, value: T) {
-        //TODO
+    pub fn add(&mut self, value: T) where T: Default + std::fmt::Debug{
+        self.items.push(value);
+        self.count += 1;
+        let mut count = self.count;
+        let mut num = 10;
+        while num > 0 && count > 1 && (self.comparator)(&self.items[count - 1], &self.items[(count - 1) / 2]) {
+            self.items.swap(count - 1, (count - 1) / 2);
+            count /= 2;
+            num -= 1;
+            println!("count: {count}, vec: {:?}", self.items);
+        }
     }
 
     fn parent_idx(&self, idx: usize) -> usize {

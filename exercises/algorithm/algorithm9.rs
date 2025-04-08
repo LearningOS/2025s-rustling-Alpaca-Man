@@ -2,7 +2,6 @@
 	heap
 	This question requires you to implement a binary heap function
 */
-// I AM NOT DONE
 
 use std::cmp::Ord;
 use std::default::Default;
@@ -36,16 +35,16 @@ where
         self.len() == 0
     }
 
-    pub fn add(&mut self, value: T) where T: Default + std::fmt::Debug{
+    pub fn add(&mut self, value: T)
+    where
+        T: Default
+    {
         self.items.push(value);
         self.count += 1;
-        let mut count = self.count;
-        let mut num = 10;
-        while num > 0 && count > 1 && (self.comparator)(&self.items[count - 1], &self.items[(count - 1) / 2]) {
-            self.items.swap(count - 1, (count - 1) / 2);
-            count /= 2;
-            num -= 1;
-            println!("count: {count}, vec: {:?}", self.items);
+        let mut index = self.count;
+        while index / 2 >= 1 && (self.comparator)(&self.items[index], &self.items[index / 2]) {
+            self.items.swap(index, index / 2);
+            index /= 2;
         }
     }
 
@@ -67,7 +66,7 @@ where
 
     fn smallest_child_idx(&self, idx: usize) -> usize {
         //TODO
-		0
+        0
     }
 }
 
@@ -93,8 +92,27 @@ where
     type Item = T;
 
     fn next(&mut self) -> Option<T> {
-        //TODO
-		None
+        if self.count < 1 {
+            return None;
+        }
+        self.items.swap(1, self.count);
+        let result = self.items.pop();
+        self.count -= 1;
+        let mut index = 1;
+        loop {
+            let left = 2 * index;
+            let right = 2 * index + 1;
+            if left <= self.count && (self.comparator)(&self.items[left], &self.items[index]) {
+                self.items.swap(index, left);
+                index = left;
+            } else if right <= self.count && (self.comparator)(&self.items[right], &self.items[index]) {
+                self.items.swap(index, right);
+                index = right;
+            } else {
+                break;
+            }
+        }
+        result
     }
 }
 
